@@ -25,10 +25,8 @@ export default function History() {
   }, [])
 
   const fetchHistory = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-
     try {
-      const res = await fetch(`${apiUrl}/comics?limit=20`)
+      const res = await fetch('/api/comics?limit=20')
       if (!res.ok) throw new Error('Failed to fetch history')
 
       const data = await res.json()

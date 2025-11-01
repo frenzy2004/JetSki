@@ -24,10 +24,8 @@ export default function Home() {
     setResult(null)
     setProcessingStage('Extracting transcript...')
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-
     try {
-      const res = await fetch(`${apiUrl}/jetski`, {
+      const res = await fetch('/api/jetski', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -38,8 +36,8 @@ export default function Home() {
       })
 
       if (!res.ok) {
-        const errorData = await res.json().catch(() => ({ detail: 'Failed to process video' }))
-        throw new Error(errorData.detail || 'Failed to process video')
+        const errorData = await res.json().catch(() => ({ error: 'Failed to process video' }))
+        throw new Error(errorData.error || 'Failed to process video')
       }
 
       const data = await res.json()
@@ -227,9 +225,9 @@ export default function Home() {
             <div className="mt-6 text-left space-y-2 max-w-2xl mx-auto">
               <p className="font-semibold text-gray-800">Common solutions:</p>
               <ul className="text-sm text-gray-700 space-y-1 ml-4">
-                <li>• Make sure the backend is running on http://localhost:8000</li>
                 <li>• Check if the YouTube URL is valid and has captions/transcript</li>
-                <li>• Verify your API keys are set in the .env file (OPENAI_API_KEY, GOOGLE_API_KEY)</li>
+                <li>• Verify your API keys are set in .env.local (OPENAI_API_KEY, GOOGLE_API_KEY)</li>
+                <li>• Make sure Supabase credentials are configured correctly</li>
                 <li>• Try a different video - some videos may not have transcripts available</li>
               </ul>
             </div>
