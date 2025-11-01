@@ -1,0 +1,25 @@
+{
+  "name": "jetski",
+  "version": "1.0.0",
+  "description": "Turn YouTube videos into viral comic strips",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd frontend && npm run start",
+    "backend": "python run.py",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/jetski"
+  },
+  "keywords": [
+    "youtube",
+    "comics",
+    "ai",
+    "viral-content",
+    "social-media"
+  ],
+  "author": "JetSki Team",
+  "license": "MIT"
+}

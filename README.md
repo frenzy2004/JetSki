@@ -70,7 +70,7 @@ COMIC_STYLE=manga-vintage
 - Google Gemini: https://aistudio.google.com/apikey
 - Google Service Account: https://console.cloud.google.com/ (optional)
 
-### 3. Run
+### 3. Run Backend
 
 ```bash
 python run.py
@@ -80,7 +80,22 @@ Server runs at: http://localhost:8000
 
 API docs: http://localhost:8000/docs
 
-### 4. Test
+### 4. Run Frontend (NEW!)
+
+```bash
+npm run dev
+```
+
+Frontend runs at: http://localhost:3000
+
+Or from the frontend directory:
+```bash
+cd frontend
+npm install  # First time only
+npm run dev
+```
+
+### 5. Test
 
 ```python
 import requests
