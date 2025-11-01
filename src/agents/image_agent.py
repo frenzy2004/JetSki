@@ -11,12 +11,13 @@ client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 def generate_comic_panels(storyboard_data: dict):
     """
     Generates 6 comic panel images using Google Gemini 2.5 Flash Image (NanoBanana).
+    Uses manga/vintage comic book hybrid style with retro halftone textures.
     Maintains character consistency across all panels.
 
     Returns list of image data (base64 encoded) for each panel.
     """
     panels = storyboard_data.get("panels", [])
-    style = storyboard_data.get("style", "modern editorial comic, bold lines, vibrant colors")
+    style = storyboard_data.get("style", "manga-vintage")
     title = storyboard_data.get("title", "Comic Story")
 
     generated_images = []
@@ -36,23 +37,31 @@ def generate_comic_panels(storyboard_data: dict):
         visual_style = panel.get("visual_style", "")
         composition = panel.get("composition", "wide shot")
 
-        # Build comprehensive prompt for NanoBanana
+        # Build comprehensive prompt for NanoBanana with manga/vintage style
         prompt = f"""
-A single comic book panel in a {style} style.
+A single comic book panel in a hybrid manga and vintage comic book style.
+
+STYLE REQUIREMENTS:
+- Combine manga aesthetics (dynamic angles, expressive characters, speed lines) with vintage American comic book elements (bold ink lines, retro halftone dot patterns, classic color palette)
+- Use thick black outlines and strong contrast
+- Add subtle halftone texture/Ben-Day dots for shadows and gradients (vintage comic effect)
+- Dramatic lighting and shadow work typical of both manga and golden age comics
+- Stylized character features with expressive eyes (manga influence)
+- Classic comic book panel framing with visible black borders
 
 COMPOSITION: {composition}
 SCENE: {scene}
 CHARACTERS: {character}
 ACTION: {action}
-VISUAL STYLE: {visual_style}
+VISUAL DETAILS: {visual_style}
 
-CONSISTENT CHARACTER DESIGN (important - use this reference for all panels):
+CHARACTER CONSISTENCY (critical - maintain same character design across all panels):
 {character_reference}
 
-TEXT CAPTION (overlay at bottom): "{caption}"
+CAPTION TEXT: "{caption}"
 
-Panel {panel_num} of 6. Comic book panel with clear borders, professional comic art quality.
-Maintain visual consistency with previous panels for character appearance.
+This is panel {panel_num} of 6 in a sequential story. Maintain visual continuity with previous panels.
+Professional illustration quality suitable for social media sharing.
 """
 
         try:

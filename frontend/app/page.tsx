@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -45,10 +45,10 @@ export default function Home() {
             🚤 JetSki
           </h1>
           <p className="text-2xl text-white/90 font-medium mb-2">
-            Turn 3-hour podcasts into 6-panel comics
+            Turn YouTube videos into viral comic strips
           </p>
           <p className="text-lg text-white/70">
-            Because nobody has time for that sh*t
+            AI analyzes the video, picks the viral moment, creates a 6-panel manga/vintage comic
           </p>
         </div>
 
@@ -60,16 +60,16 @@ export default function Home() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Paste YouTube URL (Joe Rogan, Huberman, Diary of a CEO...)"
-              className="w-full p-5 text-lg border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-all"
+              className="w-full p-5 text-lg border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-all"
               required
             />
 
             <button
               type="submit"
               disabled={loading || !url}
-              className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-5 rounded-xl font-bold text-xl hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] transition-all shadow-lg"
+              className="w-full mt-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-5 rounded-xl font-bold text-xl hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] transition-all shadow-lg"
             >
-              {loading ? '⏳ Generating Comic... (2 min)' : '🚀 Generate Comic'}
+              {loading ? '⏳ Analyzing Video... (2 min)' : '🚀 Generate Comic Strip'}
             </button>
           </div>
         </form>
@@ -198,17 +198,17 @@ export default function Home() {
                 </div>
 
                 {/* Download Section */}
-                <div className="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-200">
-                  <h4 className="font-bold text-lg mb-3">📱 Ready to Post!</h4>
-                  <div className="flex gap-3">
-                    <button className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-all">
-                      📸 Download All Panels
-                    </button>
-                    <button className="bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-all">
+                <div className="mt-8 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-2 border-blue-200">
+                  <h4 className="font-bold text-lg mb-3">📱 Ready to Share!</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all">
                       📄 View Google Doc
                     </button>
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all">
+                    <button className="bg-cyan-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-700 transition-all">
                       📂 Open Drive Folder
+                    </button>
+                    <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all">
+                      📸 Download All Panels
                     </button>
                   </div>
                 </div>

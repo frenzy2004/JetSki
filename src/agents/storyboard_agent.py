@@ -29,7 +29,8 @@ def generate_storyboard(segment_data: dict):
     Return ONLY valid JSON in this exact format:
     {{
         "title": "{hook}",
-        "style": "modern editorial comic, bold lines, vibrant colors",
+        "style": "manga-vintage",
+        "tone": "dramatic",
         "panels": [
             {{
                 "panel_number": 1,

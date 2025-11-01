@@ -16,8 +16,8 @@ if sys.platform == "win32":
 src_dir = Path(__file__).parent
 sys.path.insert(0, str(src_dir))
 
-# Import database module first (before agents to ensure it initializes)
-import db
+# Import Supabase database module
+import supabase_client as db
 
 from agents.transcript_agent import get_transcript
 from agents.highlight_agent import find_viral_moments
@@ -59,7 +59,8 @@ def root():
             "/analyze": "POST - Get viral moment analysis only",
             "/storyboard": "POST - Generate storyboard from segment data",
             "/history": "GET - Get recent video processing history",
-            "/metrics": "GET - Get performance metrics"
+            "/comics": "GET - Get recent generated comics",
+            "/storyboard/{id}": "GET - Get storyboard with panels by ID"
         }
     }
 
@@ -74,6 +75,37 @@ def get_history(limit: int = 10):
             "count": len(history),
             "videos": history
         }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/comics")
+def get_comics(limit: int = 10):
+    """Get recent generated comics with full details"""
+    try:
+        comics = db.get_recent_comics(limit=limit)
+        return {
+            "status": "success",
+            "count": len(comics),
+            "comics": comics
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/storyboard/{storyboard_id}")
+def get_storyboard(storyboard_id: str):
+    """Get storyboard with all comic panels"""
+    try:
+        storyboard = db.get_storyboard_with_panels(storyboard_id)
+        if not storyboard:
+            raise HTTPException(status_code=404, detail="Storyboard not found")
+        return {
+            "status": "success",
+            "storyboard": storyboard
+        }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -195,11 +227,27 @@ def jetski_full_pipeline(request: VideoRequest):
                 db.log_metric(video_pk, "doc_creation", time.time() - step_start,
                             success=False, error=str(e))
 
+        # Save comic panels to database if images were generated
+        if image_result and image_result.get("generated_panels"):
+            try:
+                panels_data = []
+                for panel in image_result.get("generated_panels", []):
+                    panels_data.append({
+                        "panel_number": panel.get("panel_number"),
+                        "image_data": panel.get("image_data"),
+                        "image_url": panel.get("image_url"),
+                        "caption": panel.get("caption", ""),
+                        "scene_description": panel.get("scene_description", ""),
+                        "generation_prompt": panel.get("generation_prompt", "")
+                    })
+                db.save_comic_panels(storyboard_id, panels_data)
+            except Exception as e:
+                print(f"   ⚠️  Failed to save comic panels: {str(e)}\n")
+
         # Save final generated comic to database
         total_time = time.time() - pipeline_start
         comic_id = db.save_generated_comic(
             storyboard_id=storyboard_id,
-            images_data=image_result,
             google_doc_url=google_doc_url,
             drive_folder_url=drive_folder_url,
             generation_time=total_time,

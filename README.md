@@ -44,23 +44,31 @@ That's exactly what JetSki does. Turn 3-hour Joe Rogan podcasts into 6-panel com
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Keys
+### 2. Configure Environment Variables
 
-Copy `.env.example` to `.env`:
+Copy `.env.example` to `.env` and fill in your credentials:
 
 ```bash
-# Required
+# Supabase (Database) - REQUIRED
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# AI Services - REQUIRED
 OPENAI_API_KEY=sk-your-key-here
 GOOGLE_API_KEY=your-gemini-key-here
 
-# Optional (for Google Docs/Drive)
+# Google Docs/Drive - OPTIONAL
 GOOGLE_SERVICE_ACCOUNT_PATH=/path/to/credentials.json
+
+# Comic Style
+COMIC_STYLE=manga-vintage
 ```
 
 **Get API keys:**
+- Supabase: https://app.supabase.com/ (create project, get URL and anon key)
 - OpenAI: https://platform.openai.com/api-keys
 - Google Gemini: https://aistudio.google.com/apikey
-- Google Service Account: https://console.cloud.google.com/
+- Google Service Account: https://console.cloud.google.com/ (optional)
 
 ### 3. Run
 
@@ -100,22 +108,24 @@ See [SETUP.md](SETUP.md) for:
 - Cost breakdown
 - Example workflows
 
-## 🛠️ Tech Stack (What's Actually Built)
+## 🛠️ Tech Stack
 
-### ✅ Currently Implemented
-- **Backend**: FastAPI (Python) with full orchestration
-- **Transcript Agent**: YouTube Transcript API
+### ✅ Fully Implemented
+- **Backend**: FastAPI (Python) with complete orchestration
+- **Database**: Supabase (PostgreSQL) with full data persistence
+- **Transcript Agent**: YouTube Transcript API with multi-language support
 - **Highlight Agent**: OpenAI GPT-4o-mini (viral analysis + auto-selection)
-- **Storyboard Agent**: OpenAI GPT-4o-mini (6-panel breakdown)
-- **Image Agent**: Google Gemini 2.5 Flash Image (NanoBanana)
+- **Storyboard Agent**: OpenAI GPT-4o-mini (6-panel manga/vintage comic breakdown)
+- **Image Agent**: Google Gemini 2.5 Flash Image with manga/vintage hybrid style
 - **Doc Agent**: Google Docs + Drive API integration
-- **Data Format**: Structured JSON throughout
+- **Frontend**: Next.js with React (TypeScript, Tailwind CSS)
+- **Data Format**: Structured JSON with Supabase persistence
 
-### ⏳ Planned (Not Yet Built)
-- **Frontend**: Next.js UI (currently API-only)
-- **Database**: Supabase/SQLite (agents don't persist data yet)
-- **Instagram Upload**: Auto-post to Instagram (not implemented)
-- **Video Chunking**: Handle 3+ hour videos (currently limited by transcript size)
+### 🎨 Comic Style
+- **Hybrid manga/vintage aesthetic**: Combines dynamic manga angles with retro halftone textures
+- **Bold ink lines**: Classic comic book borders and strong contrast
+- **Character consistency**: AI maintains same character design across all 6 panels
+- **Professional quality**: Ready for social media sharing
 
 ## 🏗️ Architecture
 
@@ -180,31 +190,36 @@ User pastes YouTube URL
 }
 ```
 
-## 🎨 Comic Style (NanoBanana)
+## 🎨 Comic Style (Manga/Vintage Hybrid)
 
-JetSki uses **Google Gemini 2.5 Flash Image** (nicknamed "NanoBanana"):
-- Modern editorial comic style
-- Bold lines, vibrant colors
-- Character consistency across panels
-- ~$0.039 per image (6 panels = $0.24 per comic)
+JetSki uses **Google Gemini 2.5 Flash Image** to create unique manga/vintage hybrid comics:
+- **Manga elements**: Dynamic angles, expressive characters, speed lines, stylized eyes
+- **Vintage elements**: Retro halftone dot patterns, bold ink outlines, classic comic framing
+- **High contrast**: Dramatic lighting and shadow work
+- **Character consistency**: Same character design maintained across all 6 panels
+- **Cost**: ~$0.039 per image (6 panels = $0.24 per comic)
 
 ## 📈 Current Status
 
-### ✅ MVP Complete
-- [x] 5 agents fully implemented
+### ✅ Production Ready
+- [x] 6 specialized agents fully implemented
+- [x] Supabase database with complete data persistence
 - [x] End-to-end automation (paste URL → get comic)
 - [x] Structured JSON outputs
 - [x] Google Docs/Drive integration
-- [x] NanoBanana image generation
+- [x] Manga/vintage hybrid image generation
 - [x] Auto-selection of best viral moment
 - [x] Social media strategy generation
+- [x] Next.js frontend with responsive design
+- [x] Complete API with history and metrics tracking
 
-### 🚧 Next Steps
-- [ ] Frontend UI (Next.js)
-- [ ] Test with 100+ videos
-- [ ] Instagram auto-upload
-- [ ] User accounts & history
-- [ ] Multi-comic generation (all 3 moments)
+### 🚧 Future Enhancements
+- [ ] Instagram/TikTok auto-upload integration
+- [ ] User accounts and authentication
+- [ ] Multi-comic generation (process all 3 viral moments)
+- [ ] Video chunking for 3+ hour podcasts
+- [ ] A/B testing for different comic styles
+- [ ] Custom style preferences per user
 
 ## 💰 Costs Per Comic
 
