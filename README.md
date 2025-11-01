@@ -1,287 +1,211 @@
-# 🚤 JetSki
+# JetSki - YouTube to Comic Strip Generator
 
-**"Turn long-form videos into viral, visual stories — automatically."**
+Turn YouTube videos into viral comic strips powered by AI. Pure Next.js application with zero backend dependencies.
 
-> Paste a YouTube link → AI creates a 6-panel comic + Google Doc summary
->
-> No watching required. No editing required. Just pure viral content.
-
-## 🎯 What It Does
-
-JetSki converts YouTube videos (podcasts, interviews, documentaries) into **Instagram-ready comics** automatically:
-
-1. **Analyzes** entire video transcript
-2. **Finds** top 3 viral moments (scored 0-100)
-3. **Auto-selects** the BEST moment (AI picks, not you)
-4. **Generates** 6-panel comic storyboard
-5. **Creates** comic images using Google Gemini 2.5 (NanoBanana)
-6. **Uploads** to Google Drive
-7. **Writes** Google Doc with social media strategy
-
-**Total time:** ~2 minutes for a 30-minute video
-**Total cost:** ~$0.25 per comic
-
-## 🔥 Why This Exists
-
-> "I haven't watched the whole YouTube video, but I want an agent to quickly summarize it in a way I can just glance over quickly. Like reading comics."
-
-That's exactly what JetSki does. Turn 3-hour Joe Rogan podcasts into 6-panel comics you can read in 30 seconds.
-
-## ✨ Key Features
-
-- ✅ **FULLY AUTOMATED** - No user decisions needed (AI auto-selects best viral moment)
-- ✅ **STRUCTURED JSON** - All agents return clean, parseable data
-- ✅ **NANOBANANA COMICS** - Google Gemini 2.5 Flash Image generation
-- ✅ **GOOGLE INTEGRATION** - Auto-uploads to Docs + Drive
-- ✅ **SOCIAL READY** - Hashtags, captions, posting strategy included
-- ✅ **PRODUCTION READY** - FastAPI with proper error handling
-
-## 🚀 Quick Start
-
-### 1. Install
+## Quick Start
 
 ```bash
-pip install -r requirements.txt
-```
-
-### 2. Configure Environment Variables
-
-Copy `.env.example` to `.env` and fill in your credentials:
-
-```bash
-# Supabase (Database) - REQUIRED
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# AI Services - REQUIRED
-OPENAI_API_KEY=sk-your-key-here
-GOOGLE_API_KEY=your-gemini-key-here
-
-# Google Docs/Drive - OPTIONAL
-GOOGLE_SERVICE_ACCOUNT_PATH=/path/to/credentials.json
-
-# Comic Style
-COMIC_STYLE=manga-vintage
-```
-
-**Get API keys:**
-- Supabase: https://app.supabase.com/ (create project, get URL and anon key)
-- OpenAI: https://platform.openai.com/api-keys
-- Google Gemini: https://aistudio.google.com/apikey
-- Google Service Account: https://console.cloud.google.com/ (optional)
-
-### 3. Run Backend
-
-```bash
-python run.py
-```
-
-Server runs at: http://localhost:8000
-
-API docs: http://localhost:8000/docs
-
-### 4. Run Frontend (NEW!)
-
-```bash
+# From project root
 npm run dev
 ```
 
-Frontend runs at: http://localhost:3000
+Open [http://localhost:3000](http://localhost:3000)
 
-Or from the frontend directory:
+## What Changed (v2.0)
+
+This is now a **pure Next.js application** with no Python backend. All AI processing happens in Next.js API routes.
+
+### Before (v1.0)
+```
+Frontend (React) → FastAPI (Python) → OpenAI + Google + Supabase
+```
+
+### Now (v2.0)
+```
+Frontend (React) → Next.js API Routes → OpenAI + Google + Supabase
+```
+
+### Benefits
+- No port conflicts
+- Single language stack (TypeScript)
+- Simpler deployment (Vercel one-click)
+- Better type safety
+- Faster development with hot reload
+
+## Architecture
+
+### Tech Stack
+
+- **Frontend**: Next.js 16, React 19, Tailwind CSS
+- **AI Services**:
+  - OpenAI GPT-4o-mini (viral moment analysis, storyboard generation)
+  - Google Gemini 2.0 Flash (comic image generation)
+- **Database**: Supabase (PostgreSQL)
+- **Transcript**: youtube-transcript npm package
+
+### Project Structure
+
+```
+jetski/
+├── frontend/                  # Main application
+│   ├── app/
+│   │   ├── api/              # Next.js API routes (replaces Python backend)
+│   │   │   ├── jetski/       # Main pipeline endpoint
+│   │   │   ├── history/      # Video history
+│   │   │   ├── comics/       # Recent comics
+│   │   │   └── storyboard/   # Individual storyboard
+│   │   ├── history/          # History page
+│   │   ├── page.tsx          # Main page
+│   │   └── layout.tsx        # Root layout
+│   ├── lib/
+│   │   ├── agents/           # AI agent logic (TypeScript)
+│   │   │   ├── transcript.ts # YouTube transcript extraction
+│   │   │   ├── highlight.ts  # Viral moment detection
+│   │   │   ├── storyboard.ts # 6-panel comic generation
+│   │   │   ├── image.ts      # Comic image generation
+│   │   │   └── metadata.ts   # Video metadata
+│   │   └── supabase/         # Database client and helpers
+│   │       ├── client.ts     # Supabase client
+│   │       └── db.ts         # Database functions
+│   ├── types/
+│   │   └── index.ts          # TypeScript types
+│   └── .env.local            # Environment variables
+└── legacy/                    # Old Python backend (reference only)
+```
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+
+- OpenAI API key
+- Google Gemini API key
+- Supabase account
+
+### Installation
+
+1. Navigate to frontend folder:
 ```bash
 cd frontend
-npm install  # First time only
+npm install
+```
+
+2. Create `.env.local`:
+```bash
+cp .env.local.example .env.local
+```
+
+3. Add your API keys to `.env.local`:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+GOOGLE_API_KEY=your_google_gemini_api_key
+```
+
+4. Start dev server:
+```bash
 npm run dev
 ```
 
-### 5. Test
+## How It Works
 
-```python
-import requests
+1. **Transcript Extraction** - Extracts YouTube video transcript
+2. **Viral Moment Detection** - OpenAI analyzes transcript, identifies top 3 viral segments
+3. **Storyboard Generation** - Creates 6-panel comic structure
+4. **Image Generation** - Google Gemini generates each panel with manga-vintage style
+5. **Storage** - Saves everything to Supabase
 
-response = requests.post("http://localhost:8000/jetski", json={
-    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "generate_images": True,
-    "create_google_doc": True
-})
+## API Routes
 
-result = response.json()
-print(result["viral_analysis"]["segments"][0]["hook"])
-# Output: AI-selected viral moment
-```
+### POST /api/jetski
+Main endpoint for generating comics.
 
-See [example_usage.py](example_usage.py) for complete examples.
-
-## 📖 Full Documentation
-
-See [SETUP.md](SETUP.md) for:
-- Complete installation guide
-- API endpoint documentation
-- Agent architecture breakdown
-- Troubleshooting
-- Cost breakdown
-- Example workflows
-
-## 🛠️ Tech Stack
-
-### ✅ Fully Implemented
-- **Backend**: FastAPI (Python) with complete orchestration
-- **Database**: Supabase (PostgreSQL) with full data persistence
-- **Transcript Agent**: YouTube Transcript API with multi-language support
-- **Highlight Agent**: OpenAI GPT-4o-mini (viral analysis + auto-selection)
-- **Storyboard Agent**: OpenAI GPT-4o-mini (6-panel manga/vintage comic breakdown)
-- **Image Agent**: Google Gemini 2.5 Flash Image with manga/vintage hybrid style
-- **Doc Agent**: Google Docs + Drive API integration
-- **Frontend**: Next.js with React (TypeScript, Tailwind CSS)
-- **Data Format**: Structured JSON with Supabase persistence
-
-### 🎨 Comic Style
-- **Hybrid manga/vintage aesthetic**: Combines dynamic manga angles with retro halftone textures
-- **Bold ink lines**: Classic comic book borders and strong contrast
-- **Character consistency**: AI maintains same character design across all 6 panels
-- **Professional quality**: Ready for social media sharing
-
-## 🏗️ Architecture
-
-```
-User pastes YouTube URL
-         ↓
-┌─────────────────────────────────────────────────┐
-│  JETSKI FULL PIPELINE (/jetski endpoint)       │
-└─────────────────────────────────────────────────┘
-         ↓
-[1] Transcript Agent → Extract YouTube transcript
-         ↓
-[2] Highlight Agent → Find 3 viral moments, score them, AUTO-SELECT best
-         ↓
-[3] Storyboard Agent → Generate 6-panel comic breakdown
-         ↓
-[4] Image Agent → Generate images via NanoBanana (Gemini 2.5)
-         ↓
-[5] Doc Agent → Create Google Doc + upload images to Drive
-         ↓
-    Comic ready! 🎉
-```
-
-## 📊 Example Output
-
-**Input:** 30-minute YouTube video about gold's historical significance
-
-**Output:**
+**Request:**
 ```json
 {
-  "viral_analysis": {
-    "segments": [
-      {
-        "rank": 1,
-        "score": 95,
-        "hook": "The disease of the heart",
-        "viral_type": "emotional quote",
-        "summary": "Powerful historical quote about greed and colonialism",
-        "start_time": "8:45",
-        "end_time": "11:15"
-      }
-    ],
-    "selected": {
-      "rank": 1,
-      "reason": "Highest viral potential - combines emotion, history, quotable moment"
-    }
-  },
-  "storyboard": {
-    "title": "The disease of the heart",
-    "panels": [ /* 6 detailed panel descriptions */ ],
-    "hashtags": ["#History", "#Gold", "#Colonialism"],
-    "posting_tip": "Post during peak engagement hours (12pm-3pm EST)"
-  },
-  "images": {
-    "success_count": 6,
-    "generated_panels": [ /* 6 base64-encoded comic images */ ]
-  },
-  "google_doc": {
-    "doc_url": "https://docs.google.com/document/d/...",
-    "drive_folder_url": "https://drive.google.com/drive/folders/..."
-  }
+  "video_url": "https://www.youtube.com/watch?v=...",
+  "generate_images": true,
+  "create_google_doc": false
 }
 ```
 
-## 🎨 Comic Style (Manga/Vintage Hybrid)
+### GET /api/history
+Retrieves video processing history.
 
-JetSki uses **Google Gemini 2.5 Flash Image** to create unique manga/vintage hybrid comics:
-- **Manga elements**: Dynamic angles, expressive characters, speed lines, stylized eyes
-- **Vintage elements**: Retro halftone dot patterns, bold ink outlines, classic comic framing
-- **High contrast**: Dramatic lighting and shadow work
-- **Character consistency**: Same character design maintained across all 6 panels
-- **Cost**: ~$0.039 per image (6 panels = $0.24 per comic)
+### GET /api/comics
+Fetches recent generated comics.
 
-## 📈 Current Status
+### GET /api/storyboard/[id]
+Gets specific storyboard with panels.
 
-### ✅ Production Ready
-- [x] 6 specialized agents fully implemented
-- [x] Supabase database with complete data persistence
-- [x] End-to-end automation (paste URL → get comic)
-- [x] Structured JSON outputs
-- [x] Google Docs/Drive integration
-- [x] Manga/vintage hybrid image generation
-- [x] Auto-selection of best viral moment
-- [x] Social media strategy generation
-- [x] Next.js frontend with responsive design
-- [x] Complete API with history and metrics tracking
+## Cost & Performance
 
-### 🚧 Future Enhancements
-- [ ] Instagram/TikTok auto-upload integration
-- [ ] User accounts and authentication
-- [ ] Multi-comic generation (process all 3 viral moments)
-- [ ] Video chunking for 3+ hour podcasts
-- [ ] A/B testing for different comic styles
-- [ ] Custom style preferences per user
+### Per Comic
+- Transcript: Free
+- Viral Analysis: ~$0.01
+- Storyboard: ~$0.01
+- Images (6 panels): ~$0.24
+- **Total**: ~$0.26
 
-## 💰 Costs Per Comic
+### Time
+- Without images: ~30 seconds
+- With images: ~2 minutes
 
-| Service | Cost |
-|---------|------|
-| OpenAI GPT-4o-mini (analysis + storyboard) | ~$0.01 |
-| Google Gemini 2.5 (6 images) | ~$0.24 |
-| **Total** | **~$0.25** |
+## Deployment
 
-Turn a 3-hour podcast into a viral comic for a quarter.
+### Vercel (Recommended)
 
-## 🤝 Credits
+1. Push to GitHub
+2. Import to Vercel
+3. Add environment variables
+4. Deploy
 
-Inspired by the Lindy CMO post about turning long-form videos into comic-style summaries.
-
-Built with love for NanoBanana 🍌
-
-## 📄 Project Structure
-
-```
-JetSki/
-├── src/
-│   ├── agents/
-│   │   ├── transcript_agent.py     # YouTube transcript extraction
-│   │   ├── highlight_agent.py      # Viral moment detection (auto-selects best)
-│   │   ├── storyboard_agent.py     # 6-panel comic breakdown
-│   │   ├── image_agent.py          # NanoBanana comic generation
-│   │   └── doc_agent.py            # Google Docs/Drive automation
-│   └── main.py                     # FastAPI orchestrator
-├── docs/
-│   └── PRD.md                      # Living product requirements doc
-├── SETUP.md                        # Complete setup guide
-├── example_usage.py                # Python usage examples
-├── .env.example                    # Environment variables template
-├── requirements.txt                # Python dependencies
-└── run.py                          # Server launcher
+```bash
+vercel --prod
 ```
 
-## 📖 Documentation
+## Troubleshooting
 
-- **[SETUP.md](SETUP.md)** - Installation, API docs, troubleshooting
-- **[docs/PRD.md](docs/PRD.md)** - Product requirements + experiment log
-- **[example_usage.py](example_usage.py)** - Code examples
+### "Invalid YouTube URL"
+- Use valid YouTube URL format
+- Supported: `youtube.com/watch?v=...`, `youtu.be/...`
 
----
+### "No transcript available"
+- Video must have captions/transcripts enabled
+- Try different video
 
-**JetSki** - Turn hours of video into seconds of viral content 🚀
+### "Failed to generate images"
+- Check Google API key validity
+- Verify API quota
+- Ensure Gemini access is enabled
 
-*"Somewhere, a social media manager just cried. And it wasn't from burnout, it was joy."*
+### "Database error"
+- Verify Supabase credentials
+- Check database tables exist
+- Ensure RLS policies allow operations
 
+## Development
+
+```bash
+# Development
+npm run dev
+
+# Build
+npm run build
+
+# Production
+npm start
+```
+
+## Legacy Backend
+
+The original Python FastAPI backend is in `/legacy/` for reference. It's no longer used or required.
+
+## License
+
+MIT
+
+## Support
+
+For issues, open a GitHub issue.

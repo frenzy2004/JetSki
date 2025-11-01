@@ -1,13 +1,11 @@
 {
   "name": "jetski",
-  "version": "1.0.0",
-  "description": "Turn YouTube videos into viral comic strips",
+  "version": "2.0.0",
+  "description": "Turn YouTube videos into viral comic strips - Pure Next.js Edition",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd frontend && npm run start",
-    "backend": "python run.py",
-    "frontend": "cd frontend && npm run dev"
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start"
   },
   "repository": {
     "type": "git",
@@ -18,7 +16,9 @@
     "comics",
     "ai",
     "viral-content",
-    "social-media"
+    "nextjs",
+    "openai",
+    "gemini"
   ],
   "author": "JetSki Team",
   "license": "MIT"
