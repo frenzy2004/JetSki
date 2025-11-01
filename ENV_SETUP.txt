@@ -1,0 +1,26 @@
+# 🔧 Complete .env File Setup for JetSki
+
+# Copy everything below this line into your .env file
+# ========================================================
+
+# Google Gemini API (NanoBanana - for comic generation)
+GOOGLE_API_KEY=AIzaSyAhne00yNumPpsJExCFQH01aCbwgazCnAI
+
+# OpenAI API (for viral analysis and storyboard)
+OPENAI_API_KEY=your_openai_key_here
+
+# Google Service Account (for Drive & Docs)
+GOOGLE_SERVICE_ACCOUNT_PATH=google_credentials.json
+
+# ========================================================
+# 
+# INSTRUCTIONS:
+# 1. Open your .env file in the JetSki folder
+# 2. Copy the 3 lines above (GOOGLE_API_KEY, OPENAI_API_KEY, GOOGLE_SERVICE_ACCOUNT_PATH)
+# 3. Replace "your_openai_key_here" with your actual OpenAI key (if you have it)
+# 4. Save the file
+# 5. Run: python run.py
+#
+# Note: If you don't have an OpenAI key yet, you can still test without it,
+#       but you won't be able to do viral analysis or generate storyboards.
+

@@ -33,12 +33,17 @@ ENV/
 env.bak/
 venv.bak/
 
-# Node.js (for future frontend)
+# Node.js / Next.js
 node_modules/
+.next/
+out/
+.turbo/
 
 # IDE
 .vscode/
 .idea/
+.claude/
+.cursor/
 *.swp
 *.swo
 *~
@@ -61,7 +66,9 @@ data/temp/
 # OS
 .DS_Store
 Thumbs.db
+nul
 
-# Google credentials
+# Google credentials (SENSITIVE - DO NOT COMMIT!)
 credentials.json
+google_credentials.json
 token.json

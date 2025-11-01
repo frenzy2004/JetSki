@@ -18,14 +18,26 @@ def get_transcript(video_url: str) -> str:
         return "Error: Invalid YouTube URL"
     
     try:
-        # Fetch transcript using youtube-transcript-api
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-        
-        # Combine all transcript segments into one string
-        full_transcript = " ".join([item['text'] for item in transcript_list])
-        
-        return full_transcript
-    
+        # Fetch transcript using youtube-transcript-api (v1.2.3+)
+        # Try multiple language codes to increase compatibility
+        api = YouTubeTranscriptApi()
+
+        # Try different English variants
+        for lang_codes in [['en'], ['en-US'], ['en-GB'], ['en-CA']]:
+            try:
+                transcript_obj = api.fetch(video_id, languages=lang_codes)
+                # Extract text from transcript snippets
+                full_transcript = " ".join([snippet.text for snippet in transcript_obj.snippets])
+                return full_transcript
+            except:
+                continue
+
+        # If no English transcript found, try to list available transcripts
+        api2 = YouTubeTranscriptApi()
+        transcript_list = api2.list(video_id)
+        available = [t.language_code for t in transcript_list]
+        return f"Error: No English transcript found. Available languages: {', '.join(available)}"
+
     except Exception as e:
         return f"Error fetching transcript: {str(e)}"
 
