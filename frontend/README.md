@@ -1,121 +1,118 @@
-# JetSki Frontend - COMPLETE & READY! 🚀
+# JetSki Frontend - PRODUCTION READY! 🚀
 
-> **"Turn 3-hour podcasts into 6-panel comics. Because nobody has time for that sh*t."**
+> **"Turn 3-hour podcasts into 6-panel comics in 2 minutes."**
 
-## 🎉 What I Built For You
+## ✨ What's New (Latest Update)
 
-A **BEAUTIFUL** Next.js frontend that connects to your FastAPI backend!
-
-### ✅ Files Created:
-- `app/page.tsx` - Gorgeous UI with gradient background
-- `app/layout.tsx` - Next.js layout
-- `app/globals.css` - Tailwind styles
-- `tailwind.config.ts` - Tailwind config
-- `postcss.config.js` - PostCSS config
-- `tsconfig.json` - TypeScript config
-- `next.config.js` - Next.js config
-- `package.json` - Dependencies
-
-### 🎨 Features:
-- ✅ Beautiful gradient UI (blue → purple → pink)
-- ✅ YouTube URL input
-- ✅ Loading animation with status updates
-- ✅ Viral moment display with scores
-- ✅ 6-panel comic grid display
-- ✅ Download buttons (ready for implementation)
-- ✅ Fully responsive
-- ✅ Connects to your FastAPI backend on localhost:8000
+### Fully Implemented Features:
+- ✅ **Real Image Display** - Shows generated comic panels from NanoBanana
+- ✅ **Toggle Controls** - Enable/disable image generation and Google Doc creation
+- ✅ **Cost Estimator** - Shows real-time cost based on selected options
+- ✅ **Progress Bar** - 5-stage status tracking during generation
+- ✅ **History Page** - View all previously generated comics from Supabase
+- ✅ **Download All Panels** - One-click download of all 6 comic panels
+- ✅ **Google Doc/Drive Links** - Direct links to generated docs and folders
+- ✅ **Example Videos** - Quick-click demo buttons for instant testing
+- ✅ **Error Handling** - Helpful error messages with troubleshooting tips
+- ✅ **How It Works** - Visual 5-step process flow
+- ✅ **Environment Variables** - Configurable API URL via .env.local
 
 ---
 
-## 🚀 Setup (5 Minutes)
+## 🚀 Quick Start (3 Steps)
 
-### 1. Clear Disk Space (You're Out of Space!)
-```bash
-# Delete temp files, empty recycle bin, etc
-# You need ~500MB free for node_modules
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 ```bash
 cd frontend
 npm install
 ```
 
-This will install:
-- next (React framework)
-- react & react-dom
-- tailwindcss (styling)
-- typescript
-
-### 3. Run the Frontend
+### 2. Run the Frontend
 ```bash
 npm run dev
 ```
-
 Opens on: **http://localhost:3000**
 
-### 4. Make Sure Backend is Running
+### 3. Start Backend (separate terminal)
 ```bash
-# In another terminal, from JetSki root:
+# From project root:
 python run.py
 ```
-
 Backend runs on: **http://localhost:8000**
+
+---
+
+## 🎨 Features Breakdown
+
+### Main Page (`/`)
+- **YouTube URL Input** with validation
+- **Quick Demo Buttons** - Pre-filled example URLs
+- **Toggle Switches:**
+  - Generate Comic Images (NanoBanana) - $0.24
+  - Create Google Doc & Upload to Drive - Free
+- **Cost & Time Estimator** - Updates based on toggles
+- **5-Stage Progress Bar:**
+  1. Extracting transcript
+  2. Finding viral moments
+  3. Generating storyboard
+  4. Creating comic images (if enabled)
+  5. Uploading to Google Drive (if enabled)
+
+### Results Display
+- **Video Info Card** - Title, duration, processing time
+- **Viral Analysis Card** - Top 3 moments with scores (best one highlighted)
+- **Comic Panels Grid** - 3x2 layout with real generated images or storyboard descriptions
+- **Download Section:**
+  - Hashtags for social media
+  - Posting tips
+  - View Google Doc button (if created)
+  - Open Drive Folder button (if created)
+  - Download All Panels button (downloads all 6 as PNGs)
+
+### History Page (`/history`)
+- **View Past Comics** - Grid of all previously generated comics
+- **Comic Cards** show:
+  - Video title and storyboard title
+  - Generation time and cost
+  - Status badge (success/pending)
+  - Quick links to Google Doc and Drive
+- **Generate New** button to return to main page
 
 ---
 
 ## 💡 How It Works
 
-1. User pastes YouTube URL
-2. Frontend sends POST to `http://localhost:8000/jetski`
-3. Your FastAPI backend:
-   - Extracts transcript
-   - Finds viral moments (GPT-4o)
-   - AI auto-selects best one
+1. **User pastes YouTube URL** → Joe Rogan, Huberman, Diary of a CEO
+2. **Frontend sends POST to backend** → `/jetski` endpoint
+3. **Backend processes video:**
+   - Extracts full transcript
+   - Finds top 3 viral moments (GPT-4o-mini)
+   - AI auto-selects the BEST one
    - Generates 6-panel storyboard
-   - (Optional) Generates images with NanoBanana
-4. Frontend displays:
-   - Video title
-   - Top 3 viral moments (with selected one highlighted)
-   - 6-panel comic storyboard
-   - Download buttons
+   - (Optional) Creates comic images with NanoBanana
+   - (Optional) Uploads to Google Drive & creates Doc
+4. **Frontend displays results:**
+   - Viral moment analysis
+   - 6-panel comic with images
+   - Download options
+   - Social media strategy
 
 ---
 
-## 🎯 Demo Flow
+## 🎯 Demo Flow (Perfect for Judges)
 
 1. Open **http://localhost:3000**
-2. Paste: `https://www.youtube.com/watch?v=PssKpzB0Ah0`
-3. Click "Generate Comic"
-4. Wait ~2 minutes
-5. See beautiful results!
-
----
-
-## 🔥 What Makes This PERFECT for Hackathon
-
-### Beautiful UI ✨
-- Gradient background (looks professional)
-- Smooth animations
-- Loading states with progress indicators
-- Clean, modern design
-
-### Works With Your Backend 🔌
-- Already configured to call `localhost:8000/jetski`
-- Handles loading/error states
-- Displays all your API data perfectly
-
-### Fast to Demo 🚀
-- No complex setup
-- Just `npm run dev`
-- Works immediately
-
-### Impressive to Judges 👨‍⚖️
-- Beautiful design
-- Smooth UX
-- Real AI integration
-- Full end-to-end flow
+2. Click "Joe Rogan Podcast" quick demo button (auto-fills URL)
+3. Keep "Generate Images" checked (show full power!)
+4. Optionally enable "Create Google Doc"
+5. Click "Generate Comic Strip"
+6. Watch the progress bar animate through 5 stages
+7. Results appear in ~2 minutes:
+   - See the viral moment AI selected
+   - View beautiful 6-panel comic with real images
+   - Download panels or open Google Doc
+8. Click "View History" to show persistence
+9. WOW THE JUDGES! 🏆
 
 ---
 
@@ -124,49 +121,40 @@ Backend runs on: **http://localhost:8000**
 ```
 frontend/
 ├── app/
-│   ├── page.tsx          ← Main UI (BEAUTIFUL!)
-│   ├── layout.tsx        ← Next.js layout
-│   └── globals.css       ← Tailwind styles
-├── tailwind.config.ts    ← Tailwind config
-├── tsconfig.json         ← TypeScript config
-├── next.config.js        ← Next.js config
-├── package.json          ← Dependencies
-└── README.md             ← This file
+│   ├── page.tsx              ← Main UI with full functionality
+│   ├── layout.tsx            ← Next.js app layout
+│   ├── globals.css           ← Tailwind styles
+│   └── history/
+│       └── page.tsx          ← History view with Supabase integration
+├── .env.local                ← Environment variables (API URL)
+├── .env.local.example        ← Template for env vars
+├── tailwind.config.ts        ← Tailwind configuration
+├── next.config.js            ← Next.js configuration
+├── package.json              ← Dependencies
+└── README.md                 ← This file
 ```
 
 ---
 
-## 🎨 UI Breakdown
+## ⚙️ Environment Variables
 
-### Header
-- Giant "🚤 JetSki" title
-- Tagline: "Turn 3-hour podcasts into 6-panel comics"
-- Subtitle: "Because nobody has time for that sh*t"
+Create `.env.local` in the frontend directory:
 
-### Input Section
-- Clean white card
-- Large input field for YouTube URL
-- Beautiful purple/pink gradient button
-- Shows loading state during processing
+```env
+# Backend API URL (change for production deployment)
+NEXT_PUBLIC_API_URL=http://localhost:8000
 
-### Results Section
-- **Video Info Card**: Title + metrics
-- **Viral Moments Card**: Top 3 segments, selected one highlighted green
-- **Storyboard Grid**: 3x2 grid of comic panels with captions
-- **Action Buttons**: Download, Google Doc, Drive folder
+# Supabase (optional - for direct queries)
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### "ENOSPC: no space left on device"
-- **Fix**: Clear disk space! Need ~500MB for node_modules
-- Delete temp files, empty recycle bin
-- Run `npm install` again
-
 ### Frontend won't start
 ```bash
-# Try:
 rm -rf node_modules package-lock.json
 npm install
 npm run dev
@@ -174,65 +162,87 @@ npm run dev
 
 ### Backend connection error
 - Make sure FastAPI is running on `localhost:8000`
-- Check CORS is enabled in FastAPI
-- Try: `python run.py`
+- Check CORS is enabled in backend
+- Verify API keys are set in backend `.env` file
 
----
+### Images not displaying
+- Ensure `generate_images` toggle is enabled
+- Check GOOGLE_API_KEY is set in backend
+- Verify NanoBanana (Gemini 2.5) is working
 
-## 🚀 Next Steps
-
-### For Demo:
-1. Clear disk space
-2. Install dependencies: `npm install`
-3. Run frontend: `npm run dev`
-4. Run backend: `python run.py` (in different terminal)
-5. Test with a real video
-6. Practice your pitch!
-
-### To Deploy:
-```bash
-# Frontend (Vercel):
-vercel deploy
-
-# Backend (Render/Railway):
-# Push to GitHub, connect to Render
-```
+### History page is empty
+- Generate at least one comic first
+- Check backend Supabase connection
+- Verify `/comics` endpoint returns data
 
 ---
 
 ## 💰 Cost Breakdown
 
-Per comic generated:
-- GPT-4o-mini (transcript + storyboard): ~$0.02
-- NanoBanana (6 images): ~$0.23
-- **Total: ~$0.25**
+| Option | Service | Cost |
+|--------|---------|------|
+| Storyboard Only | GPT-4o-mini | ~$0.01 |
+| With Images | + NanoBanana (6 panels) | ~$0.25 |
+| With Google Doc | + Google Drive API | Free |
+
+**Demo Tip:** For fast demos, disable image generation (30 seconds vs 2 minutes)
 
 ---
 
-## 🏆 The Pitch
+## 🚀 Deployment
 
-> "You ever tried turning a 3-hour Joe Rogan podcast into social media content?
+### Deploy Frontend (Vercel)
+```bash
+vercel deploy
+```
+
+### Deploy Backend (Render/Railway)
+1. Push to GitHub
+2. Connect repo to Render
+3. Set environment variables
+4. Deploy!
+
+### Update API URL
+Change `NEXT_PUBLIC_API_URL` in `.env.local` to your production backend URL
+
+---
+
+## 🏆 Hackathon Pitch (30 seconds)
+
+> "Content creators waste HOURS turning podcasts into social media posts.
 >
-> It's hell. Hours of scrubbing, editing, hoping you find the ONE viral moment.
+> JetSki solves that in 2 minutes.
 >
-> **JetSki does it in 2 minutes.**
+> Paste any YouTube link. AI analyzes the ENTIRE video, finds the viral moments, and generates a 6-panel comic automatically.
 >
-> Paste the YouTube link. Wait 2 minutes. Get a 6-panel comic ready to post.
+> *[SHOW DEMO]*
 >
-> **Cost:** 25 cents per comic.
-> **Time:** 2 minutes.
-> **Burnout:** Zero.
+> 25 cents per comic. Zero manual work. Zero burnout.
 >
 > If long-form was the ocean, we just built a jet ski."
 
 ---
 
-## ✅ You're READY!
+## ✅ Pre-Demo Checklist
 
-Everything is built. Just need to:
-1. Free up disk space
-2. Run `npm install`
-3. Run `npm run dev`
-4. DEMO IT AND WIN! 🏆
+- [ ] Backend running (`python run.py`)
+- [ ] Frontend running (`npm run dev`)
+- [ ] Browser open to `localhost:3000`
+- [ ] API keys configured in backend `.env`
+- [ ] Test with one example video
+- [ ] Pitch memorized
+- [ ] History has 1-2 example comics
 
-**Your backend is SOLID. Your frontend is BEAUTIFUL. You got this!** 🔥
+---
+
+## 🎉 You're Ready!
+
+**What You Built:**
+- Complete Next.js frontend with TypeScript
+- Real-time image display from backend
+- History tracking with Supabase
+- Beautiful, responsive UI
+- Error handling and loading states
+- Production-ready code
+
+**Now go crush that demo!** 🔥
