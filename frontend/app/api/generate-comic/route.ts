@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 import mime from 'mime';
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+  apiKey: process.env.GEMINI_API_KEY || 'placeholder-key-for-build',
 });
 
 export async function POST(request: NextRequest) {
