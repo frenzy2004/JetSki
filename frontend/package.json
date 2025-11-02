@@ -9,15 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@google/genai": "^1.28.0",
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^17.2.3",
+    "googleapis": "^164.1.0",
+    "mime": "^4.1.0",
     "next": "^16.0.1",
     "openai": "^6.7.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "youtube-transcript": "^1.2.1"
+    "youtube-captions-scraper": "^2.0.3"
   },
   "devDependencies": {
+    "@types/mime": "^3.0.4",
     "@types/node": "^20.19.24",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",

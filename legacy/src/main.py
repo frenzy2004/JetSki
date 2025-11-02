@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
 import os
@@ -30,6 +31,15 @@ app = FastAPI(
     title="JetSki API",
     description="AI-powered YouTube video to comic converter",
     version="1.0.0"
+)
+
+# Add CORS middleware to allow frontend to connect
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Request models

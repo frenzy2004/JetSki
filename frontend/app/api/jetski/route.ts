@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTranscript } from '@/lib/agents/transcript';
-import { getVideoMetadata } from '@/lib/agents/metadata';
-import { findViralMoments } from '@/lib/agents/highlight';
-import { generateStoryboard } from '@/lib/agents/storyboard';
-import { generateComicPanels } from '@/lib/agents/image';
-import { saveVideoRecord, saveStoryboard, savePanels } from '@/lib/supabase/db';
-import { VideoRequest, PipelineResponse } from '@/types';
+import { getYouTubeTranscript } from '@/lib/youtube';
+import { callGPT } from '@/lib/openai';
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
   try {
-    const body: VideoRequest = await request.json();
-    const { video_url, generate_images = true, create_google_doc = false } = body;
+    const { video_url, generate_images = false } = await request.json();
 
     if (!video_url) {
       return NextResponse.json(
@@ -23,90 +17,123 @@ export async function POST(request: NextRequest) {
 
     console.log('🚤 Starting JetSki pipeline for:', video_url);
 
-    const transcriptStart = Date.now();
+    // STEP 1: Get transcript
     console.log('📝 Step 1: Extracting transcript...');
-    const transcript = await getTranscript(video_url);
+    const transcriptStart = Date.now();
+    const transcript = await getYouTubeTranscript(video_url);
     const transcriptTime = Date.now() - transcriptStart;
-    console.log(`✅ Transcript extracted (${transcriptTime}ms)`);
+    console.log(`✅ Transcript extracted (${transcriptTime}ms, ${transcript.split(' ').length} words)`);
 
-    console.log('📺 Step 2: Fetching video metadata...');
-    const metadata = await getVideoMetadata(video_url);
-    console.log(`✅ Metadata fetched: ${metadata.title}`);
-
+    // STEP 2: Find viral moments
+    console.log('🔍 Step 2: Analyzing viral moments...');
     const viralStart = Date.now();
-    console.log('🔍 Step 3: Analyzing viral moments...');
-    const viralAnalysis = await findViralMoments(transcript);
+    
+    const viralSystemPrompt = `You are a viral content analyst. Return JSON:
+{
+  "segments": [
+    {
+      "rank": 1,
+      "score": 95,
+      "excerpt": "quote",
+      "timestamps": "time range",
+      "viral_type": "emotional/quotable/surprising",
+      "reason": "why viral"
+    }
+  ],
+  "selected": { best segment }
+}`;
+
+    const viralUserPrompt = `Find 3 most viral moments in this transcript:
+
+${transcript.substring(0, 8000)}`;
+
+    const viralAnalysis = await callGPT(viralSystemPrompt, viralUserPrompt, 0.7);
     const viralTime = Date.now() - viralStart;
     console.log(`✅ Found ${viralAnalysis.segments.length} viral moments (${viralTime}ms)`);
 
-    const selectedSegment = viralAnalysis.segments.find(
-      (s) => s.rank === viralAnalysis.selected.rank
-    );
-
-    if (!selectedSegment) {
-      throw new Error('No viral segment selected');
-    }
-
+    // STEP 3: Generate storyboard
+    console.log('🎬 Step 3: Generating 6-panel storyboard...');
     const storyboardStart = Date.now();
-    console.log('🎬 Step 4: Generating storyboard...');
-    const storyboard = await generateStoryboard(selectedSegment);
-    const storyboardTime = Date.now() - storyboardStart;
-    console.log(`✅ Storyboard created with ${storyboard.panels.length} panels (${storyboardTime}ms)`);
 
-    let imageResult;
-    let imageTime;
-    if (generate_images) {
-      const imageStart = Date.now();
-      console.log('🎨 Step 5: Generating comic images...');
-      imageResult = await generateComicPanels(storyboard);
-      imageTime = Date.now() - imageStart;
-      console.log(`✅ Generated ${imageResult.success_count}/${imageResult.total_panels} images (${imageTime}ms)`);
+    const storyboardSystemPrompt = `You are a comic storyboard artist. Return JSON:
+{
+  "title": "title",
+  "panels": [
+    {
+      "panel_number": 1,
+      "caption": "text",
+      "visual_description": "scene",
+      "character_details": "who & expression",
+      "composition": "framing",
+      "mood": "tone"
     }
+  ]
+}
+Create exactly 6 panels.`;
 
-    console.log('💾 Step 6: Saving to Supabase...');
-    const videoId = await saveVideoRecord({
-      video_url,
-      video_title: metadata.title,
-      channel_name: metadata.channel_name,
-      selected_segment_rank: selectedSegment.rank,
-      selected_segment_score: selectedSegment.score,
-      viral_type: selectedSegment.viral_type
-    });
+    const storyboardUserPrompt = `Create 6-panel comic for:
+"${viralAnalysis.selected.excerpt}"
+Type: ${viralAnalysis.selected.viral_type}`;
 
-    const storyboardId = await saveStoryboard(videoId, storyboard);
-    await savePanels(storyboardId, storyboard.panels, imageResult);
-    console.log('✅ Saved to database');
+    const storyboard = await callGPT(storyboardSystemPrompt, storyboardUserPrompt, 0.8);
+    const storyboardTime = Date.now() - storyboardStart;
+    console.log(`✅ Storyboard created (${storyboardTime}ms)`);
+
+    // STEP 4: Generate comic images (if requested)
+    let comicImages = null;
+    let imageGenerationTime = 0;
+
+    if (generate_images) {
+      console.log('🎨 Step 4: Generating comic panel images...');
+      const imageStart = Date.now();
+
+      try {
+        const imageResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/generate-comic`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ panels: storyboard.panels }),
+        });
+
+        if (imageResponse.ok) {
+          comicImages = await imageResponse.json();
+          imageGenerationTime = Date.now() - imageStart;
+          console.log(`✅ Generated ${comicImages.successful_panels}/${comicImages.total_panels} images (${imageGenerationTime}ms)`);
+        } else {
+          console.error('❌ Image generation failed:', await imageResponse.text());
+        }
+      } catch (imageError: any) {
+        console.error('❌ Image generation error:', imageError.message);
+      }
+    }
 
     const totalTime = Date.now() - startTime;
 
-    const response: PipelineResponse = {
+    return NextResponse.json({
+      success: true,
       video_url,
-      video_title: metadata.title,
       viral_analysis: viralAnalysis,
-      storyboard,
-      images: imageResult,
-      status: 'success',
+      storyboard: storyboard,
+      comic_images: comicImages,
       metrics: {
         total_time_seconds: totalTime / 1000,
         transcript_time: transcriptTime,
         viral_analysis_time: viralTime,
         storyboard_time: storyboardTime,
-        image_generation_time: imageTime
+        image_generation_time: imageGenerationTime
       }
-    };
-
-    console.log(`🎉 Pipeline complete! Total time: ${totalTime}ms`);
-
-    return NextResponse.json(response);
+    });
   } catch (error: any) {
     console.error('❌ Pipeline error:', error);
 
     return NextResponse.json(
       {
-        error: error.message || 'Internal server error',
+        error: error.message || 'Pipeline failed',
         detail: error.stack
       },
       { status: 500 }
     );
   }
 }
+

@@ -52,9 +52,9 @@ export default function Home() {
   }
 
   const downloadAllPanels = () => {
-    if (!result?.images?.generated_panels) return
+    if (!result?.comic_images?.panels) return
 
-    result.images.generated_panels.forEach((panel: any) => {
+    result.comic_images.panels.forEach((panel: any) => {
       if (panel.image_base64) {
         const link = document.createElement('a')
         link.href = `data:${panel.mime_type || 'image/png'};base64,${panel.image_base64}`
@@ -64,8 +64,8 @@ export default function Home() {
     })
   }
 
-  const estimatedCost = generateImages ? '$0.25' : '$0.01'
-  const estimatedTime = generateImages ? '~2 min' : '~30 sec'
+  const estimatedCost = generateImages ? '$0.04' : '$0.01'
+  const estimatedTime = generateImages ? '~30 sec' : '~10 sec'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
@@ -159,7 +159,7 @@ export default function Home() {
                 <span className="text-gray-700 font-medium">
                   Generate Comic Images (NanoBanana)
                 </span>
-                <span className="text-sm text-gray-500">+$0.24</span>
+                <span className="text-sm text-gray-500">+$0.03</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer">
@@ -256,7 +256,7 @@ export default function Home() {
               </h2>
               <div className="flex gap-4 text-sm text-gray-600">
                 <span>⏱️ Total time: {result.metrics?.total_time_seconds.toFixed(1)}s</span>
-                <span>💰 Cost: ~$0.25</span>
+                <span>💰 Cost: ~$0.04</span>
               </div>
             </div>
 
@@ -312,7 +312,7 @@ export default function Home() {
                 {/* Comic Panels Grid */}
                 <div className="grid grid-cols-3 gap-6">
                   {result.storyboard.panels?.map((panel: any) => {
-                    const generatedPanel = result.images?.generated_panels?.find(
+                    const generatedPanel = result.comic_images?.panels?.find(
                       (p: any) => p.panel_number === panel.panel_number
                     )
                     const hasImage = generatedPanel?.image_base64
@@ -331,7 +331,7 @@ export default function Home() {
                             />
                           ) : (
                             <div className="text-gray-400 text-sm p-4 text-center">
-                              {panel.scene_description}
+                              {panel.visual_description || panel.scene_description}
                             </div>
                           )}
                         </div>
@@ -395,7 +395,7 @@ export default function Home() {
                         📂 Open Drive Folder
                       </a>
                     )}
-                    {result.images?.generated_panels?.some((p: any) => p.image_base64) && (
+                    {result.comic_images?.panels?.some((p: any) => p.image_base64) && (
                       <button
                         onClick={downloadAllPanels}
                         className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all"
@@ -412,7 +412,7 @@ export default function Home() {
 
         {/* Footer */}
         <div className="mt-16 text-center text-white/60 text-sm">
-          <p>Built with GPT-4o-mini + NanoBanana • ~$0.25 per comic • &lt;2 min generation</p>
+          <p>Built with GPT-4o-mini + NanoBanana (Gemini 2.5 Flash Image) • ~$0.04 per comic • ~30 sec generation</p>
           <p className="mt-2">If long-form was the ocean, we just built a jet ski 🚤</p>
         </div>
       </div>

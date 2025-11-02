@@ -1,0 +1,25 @@
+===========================================
+CREATE THIS FILE: frontend/.env.local
+===========================================
+
+Copy everything below into a new file called .env.local:
+
+# JetSki Environment Variables
+
+# OpenAI API Key (for viral analysis & storyboard generation)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Google Gemini API Key (for comic generation)
+GOOGLE_API_KEY=your_google_gemini_api_key_here
+GEMINI_API_KEY=your_google_gemini_api_key_here
+
+# Google OAuth for Drive/Docs (optional - for Google Drive upload feature)
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/callback/google
+GOOGLE_REFRESH_TOKEN=your_google_refresh_token_here
+
+===========================================
+THEN RUN: npm run dev
+===========================================
+
