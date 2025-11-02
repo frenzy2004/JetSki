@@ -103,10 +103,10 @@ COMPOSITION: ${panel.composition}
 - Vintage comic book aesthetic with modern visual polish`;
 
       try {
-        const config = {
-          responseModalities: ['IMAGE'] as ('IMAGE' | 'TEXT')[],
+        const config: any = {
+          responseModalities: ['IMAGE'],
           imageConfig: {
-            imageSize: '1K' as '1K' | '2K' | '4K',
+            imageSize: '1K',
           },
         };
 
