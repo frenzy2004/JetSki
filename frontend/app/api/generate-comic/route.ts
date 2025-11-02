@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 import mime from 'mime';
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || 'placeholder-key-for-build',
+  apiKey: process.env.GEMINI_API_KEY!,
 });
 
 export async function POST(request: NextRequest) {
@@ -103,10 +103,10 @@ COMPOSITION: ${panel.composition}
 - Vintage comic book aesthetic with modern visual polish`;
 
       try {
-        const config: any = {
-          responseModalities: ['IMAGE'],
+        const config = {
+          responseModalities: ['IMAGE'] as const,
           imageConfig: {
-            imageSize: '1K',
+            imageSize: '1K' as const,
           },
         };
 
